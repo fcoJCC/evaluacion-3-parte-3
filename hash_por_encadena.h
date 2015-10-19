@@ -88,11 +88,11 @@ void ingresar_datos_a_tabla(Nodo *aux_tabla[m])
         fscanf(fp, "%d;", &region);
         fscanf(fp, "%d;", &mes);
         fscanf(fp, "%d;", &parte);
-        fscanf(fp, "%[^;];", &sexo);
+        fscanf(fp, "%s;", &sexo);
         fscanf(fp, "%d;", &edad);
-        fscanf(fp, "%[^;];", &e_civil);
-        fscanf(fp, "%[^\n];", &nacion);
-        fscanf(fp, "%[^\n];", &calidad);
+        fscanf(fp, "%s;", &e_civil);
+        fscanf(fp, "%s;", &nacion);
+        fscanf(fp, "%s;", &calidad);
         fscanf(fp, "%ld;", &key_rut);
 
         if(aux_tabla[hash(key_rut)]->datos.rut==0){

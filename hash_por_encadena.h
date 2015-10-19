@@ -18,11 +18,12 @@
 #define TIME_H
 #endif
 
-#define m 20
+#define m 5 //sera el mod del codigo y tamaño de nuestro arreglo
 
 typedef long int KEY;
 
-typedef struct registro{
+typedef struct registro
+{
     KEY rut; // agregar nombre y apellidos
     int region,mes,parte,edad;
     char sexo[15];
@@ -32,12 +33,14 @@ typedef struct registro{
 
 }Registro;
 
-typedef struct nodo{
+typedef struct nodo
+{
     Registro datos;
-    struct nodo *sgte_dato;
+    struct nodo *sig_dato;
 }Nodo;
 
-int hash(KEY aux_rut){
+int hash(KEY aux_rut)
+{
     return (aux_rut%m);
 }
 
@@ -52,7 +55,7 @@ Nodo *iniciar_nodo(long aux_rut, int aux_region, int aux_mes, int aux_parte, int
 	strcpy(aux->datos.nacion, aux_nacion);
 	strcpy(aux->datos.calidad, aux_calidad);
 	strcpy(aux->datos.e_civil, aux_e_civil);
-	aux->sgte_dato=NULL;
+	aux->sig_dato=NULL;
 	return aux;
 }
 
@@ -66,7 +69,8 @@ void iniciar_nodos_tabla(Nodo *aux_tabla[m]){
 }
 
 
-void ingresar_datos_a_tabla(Nodo *aux_tabla[m]){
+void ingresar_datos_a_tabla(Nodo *aux_tabla[m])
+{
     FILE *fp=fopen("datos_detenidos.csv", "r");
 
     long int key_rut;
@@ -93,14 +97,32 @@ void ingresar_datos_a_tabla(Nodo *aux_tabla[m]){
 
         if(aux_tabla[hash(key_rut)]->datos.rut==0){
             aux_tabla[hash(key_rut)]=iniciar_nodo(key_rut, region, mes, parte, edad, sexo, nacion, calidad, e_civil);
-        }else{
-            Nodo *aux=aux_tabla[hash(key_rut)]->sgte_dato;
-            aux_tabla[hash(key_rut)]->sgte_dato=iniciar_nodo(key_rut, region, mes, parte, edad, sexo, nacion, calidad, e_civil);
-            aux_tabla[hash(key_rut)]->sgte_dato->sgte_dato=aux;
+        }
+        else
+        {
+            Nodo *aux=aux_tabla[hash(key_rut)]->sig_dato;
+            aux_tabla[hash(key_rut)]->sig_dato=iniciar_nodo(key_rut, region, mes, parte, edad, sexo, nacion, calidad, e_civil);
+            aux_tabla[hash(key_rut)]->sig_dato->sig_dato
+            =aux;
 
         }
     }    printf("tiempo de suceso: %f\n", ((double)clock() - start) / CLOCKS_PER_SEC);
 
     fclose(fp);
 
+}
+    Nodo *buscar_datos_en_tabla(Nodo * aux_tabla[m], int indice_hash, long key_rut){
+    Nodo *recorrido=aux_tabla[indice_hash];
+    clock_t start = clock();
+    while(recorrido!=NULL)
+    {
+        if(recorrido->datos.rut==key_rut)
+            {
+            printf("Tiempo transcurrido de Búsqueda: %f\n", ((double)clock() - start) / CLOCKS_PER_SEC);
+            return(recorrido);
+        }
+        recorrido=recorrido->sig_dato;
+    }
+    return(NULL);
 
+}

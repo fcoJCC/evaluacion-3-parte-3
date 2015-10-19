@@ -14,19 +14,19 @@
 #endif
 
 
-int main(){
+int main()
+{
+    int rut_ingresado;
     Nodo *tabla[m];
     iniciar_nodos_tabla(tabla);
-
     ingresar_datos_a_tabla(tabla);
-
-    int in_rut;
     printf("ingresa el rut:\n");
-    scanf("%ld", &in_rut);
+    scanf("%ld", &rut_ingresado);
 
 
-    Nodo* encuentra=buscar_datos_en_tabla(tabla, hash(in_rut), in_rut);
-    if(encuentra!=NULL){
+    Nodo* encuentra=(Nodo *)buscar_datos_en_tabla(tabla, hash(rut_ingresado), rut_ingresado);
+    if(encuentra!=NULL)
+        {
         printf("\n\n Detenido Registrado:\n\n");
         printf("Calidad: %s \n",encuentra->datos.calidad);
         printf("Mes de captura: %d \n",encuentra->datos.mes);
@@ -35,9 +35,10 @@ int main(){
         printf("Sexo: %s \n", encuentra->datos.sexo);
         printf("Nacion de origen: %s \n", encuentra->datos.nacion);
         printf("Estado civil: %s \n", encuentra->datos.e_civil);
-    }else
+    }
+    else
+    {
         printf("\n\nEl detenido no se encuentra en nuestra base de datos...\n");
-
-
+    }
     return 0;
 }
